@@ -12,6 +12,7 @@ class AdminController extends Controller
 
     public function dashboard()
     {
+        // $this->authorize('view-dashboard');
         $users = User::all();
         $quizzes = Quiz::all();
 

@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\StaffController;
 
 
 /*
@@ -21,18 +23,24 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
 require __DIR__.'/auth.php';
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-Route::get('/admin/candidate', [AdminController::class, 'candidate'])->name('admin.candidate');
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('home');
+})->name('logout');
 
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/candidate', [AdminController::class, 'candidate'])->name('admin.candidate');
+});
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('quizzes', QuizController::class);
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('staff', StaffController::class);
 });
 
 Route::group(['prefix' => 'candidate', 'middleware' => 'auth'], function () {

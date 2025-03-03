@@ -49,8 +49,9 @@ class QuizController extends Controller
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz created successfully.');
     }
 
-    public function show(Quiz $quiz)
+    public function show(Quiz $quiz , $id)
     {
+        $quiz = Quiz::find($id);
         return view('admin.quizzes.show', compact('quiz'));
     }
 
@@ -88,8 +89,7 @@ class QuizController extends Controller
             }
         }
     
-        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');
-    }
+        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');    }
 
     public function destroy(Quiz $quiz)
     {
