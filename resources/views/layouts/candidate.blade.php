@@ -17,31 +17,20 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="youcode-logo text-2xl font-bold">
+                    <h1 class="youcode-logo text-2xl font-bold">
                         <span class="you">You</span><span class="code">Code</span>
-                    </a>
+                    </h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    @auth
-                        <span class="text-gray-700">{{ auth()->user()->name }}</span>
-                        <a href="{{ route('logout') }}" 
-                           class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" 
-                           class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                            Login
-                        </a>
-                        <a href="{{ route('register') }}" 
-                           class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                            Register
-                        </a>
-                    @endauth
+                    <span class="text-gray-700">{{ auth()->user()->name }}</span>
+                    <a href="{{ route('logout') }}" 
+                       class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
@@ -49,22 +38,6 @@
 
     <!-- Main Content -->
     <main class="flex-1">
-        <!-- Success/Error Messages -->
-        @if (session('success'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
-                    {{ session('error') }}
-                </div>
-            </div>
-        @endif
-
         @yield('content')
     </main>
 

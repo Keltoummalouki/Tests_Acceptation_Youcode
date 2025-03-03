@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\QuizController;
 
 
@@ -18,7 +19,7 @@ use App\Http\Controllers\QuizController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,4 +33,11 @@ Route::get('/admin/candidate', [AdminController::class, 'candidate'])->name('adm
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('quizzes', QuizController::class);
+});
+
+Route::group(['prefix' => 'candidate', 'middleware' => 'auth'], function () {
+    Route::get('/profile', [CandidateController::class, 'showProfile'])->name('candidate.profile');
+    Route::post('/profile', [CandidateController::class, 'storeProfile'])->name('candidate.profile.store');
+    Route::get('/quiz', [QuizController::class, 'start'])->name('candidate.quiz.start');
+    Route::post('/quiz/submit', [QuizController::class, 'submit'])->name('candidate.quiz.submit');
 });

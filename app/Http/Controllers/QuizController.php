@@ -34,17 +34,18 @@ class QuizController extends Controller
             'time_limit' => 'required|integer|min:1',
             'questions.*.question_text' => 'required|string',
             'questions.*.options.*.option_text' => 'required|string',
+            'questions.*.options.*.is_correct' => 'required|boolean',
         ]);
-
+    
         $quiz = Quiz::create($request->only('title', 'description', 'time_limit'));
-
+    
         foreach ($request->questions as $questionData) {
             $question = $quiz->questions()->create(['question_text' => $questionData['question_text']]);
             foreach ($questionData['options'] as $optionData) {
                 $question->options()->create($optionData);
             }
         }
-
+    
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz created successfully.');
     }
 
@@ -66,17 +67,27 @@ class QuizController extends Controller
             'time_limit' => 'required|integer|min:1',
             'questions.*.question_text' => 'required|string',
             'questions.*.options.*.option_text' => 'required|string',
+            'questions.*.options.*.is_correct' => 'required|boolean',
         ]);
-
+    
         $quiz->update($request->only('title', 'description', 'time_limit'));
-
+    
         foreach ($request->questions as $questionData) {
-            $question = $quiz->questions()->updateOrCreate(['id' => $questionData['id']], ['question_text' => $questionData['question_text']]);
-            foreach ($questionData['options'] as $optionData) {
-                $question->options()->updateOrCreate(['id' => $optionData['id']], $optionData);
+            $question = $quiz->questions()->updateOrCreate(
+                ['id' => $questionData['id'] ?? null], 
+                ['question_text' => $questionData['question_text']]
+            );
+    
+            if (isset($questionData['options'])) {
+                foreach ($questionData['options'] as $optionData) {
+                    $question->options()->updateOrCreate(
+                        ['id' => $optionData['id'] ?? null], 
+                        ['option_text' => $optionData['option_text'], 'is_correct' => $optionData['is_correct']]
+                    );
+                }
             }
         }
-
+    
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');
     }
 
@@ -85,5 +96,42 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz deleted successfully.');
+    }
+
+    public function start(Request $request)
+    {
+        $quiz = Quiz::with('questions.options')->first();
+
+        if (!$quiz) {
+            return redirect()->route('candidate.profile')->with('error', 'No quiz available at this time.');
+        }
+
+        return view('candidate.quiz', [
+            'quiz' => $quiz,
+        ]);
+    }
+
+    public function submit(Request $request)
+    {
+        $validated = $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id',
+            'answers' => 'required|array',
+            'answers.*' => 'exists:options,id',
+        ]);
+    
+        $quiz = Quiz::find($validated['quiz_id']);
+        $score = 0;
+        $total = $quiz->questions->count();
+    
+        foreach ($quiz->questions as $question) {
+            $selectedOptionId = $validated['answers'][$question->id] ?? null;
+            $correctOption = $question->options->firstWhere('is_correct', true);
+            
+            if ($selectedOptionId && $correctOption && $selectedOptionId == $correctOption->id) {
+                $score++;
+            }
+        }
+    
+        return redirect()->route('candidate.profile')->with('success', "Quiz completed! Score: $score/$total");
     }
 }

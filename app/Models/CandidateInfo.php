@@ -12,11 +12,12 @@ class CandidateInfo extends Model
     protected $table = 'candidateInfo';
 
     protected $fillable = [
+        'user_id',
         'phone',
         'address',
         'city',
         'date_of_birth',
-        'zip',
+        'document_type',
         'document_path',
     ];
 
