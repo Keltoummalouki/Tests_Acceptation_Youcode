@@ -13,4 +13,9 @@ class Role extends Model
         'name',
         'guard_name',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
