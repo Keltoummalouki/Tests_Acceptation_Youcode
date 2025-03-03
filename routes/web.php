@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\auth\AuthenticatedSessionController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StaffController;
@@ -25,10 +26,9 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect()->route('home');
-})->name('logout');
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -37,9 +37,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('quizzes', QuizController::class);
-});
-
-Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('staff', StaffController::class);
 });
 

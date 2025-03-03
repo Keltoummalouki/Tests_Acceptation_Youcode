@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/Youcode/OneDrive/Bureau/YoucodeTest/resources/views/layouts/layout.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,21 +17,28 @@
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <div class="flex items-center">
+                <div class="flex items-center space-x-6">
                     <a href="{{ route('home') }}" class="youcode-logo text-2xl font-bold">
                         <span class="you">You</span><span class="code">Code</span>
                     </a>
+                    @auth
+                    @if(auth()->user()->role('Candidate'))
+                        <a href="{{ route('candidate.profile') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+                        <a href="{{ route('candidate.quiz.start') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Take Quiz</a>
+                    @elseif (auth()->user()->role('Admin'))
+                        <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Admin Dashboard</a>
+                    @endif
+                    @endauth
                 </div>
                 <div class="flex items-center space-x-4">
                     @auth
-                        <span class="text-gray-700">{{ auth()->user()->name }}</span>
-                        <a href="{{ route('logout') }}" 
-                           class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        <span class="text-gray-700 font-medium">{{ auth()->user()->name }}</span>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
+                            <button type="submit" 
+                                    class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                                Logout
+                            </button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" 
