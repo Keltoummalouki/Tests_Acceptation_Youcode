@@ -20,7 +20,7 @@ class CreateQuizResultsTable extends Migration
             $table->unsignedBigInteger('quiz_id');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->integer('score')->nullable();
-            $table->boolean('passed')->nullable();
+            $table->integer('total');
             $table->timestamps();
         });
     }

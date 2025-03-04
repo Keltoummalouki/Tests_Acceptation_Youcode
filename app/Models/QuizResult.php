@@ -9,10 +9,22 @@ class QuizResult extends Model
 {
     use HasFactory;
 
-    protected $table = 'quiz_results';
+    protected $table = 'quizResults';
 
     protected $fillable = [
+        'user_id',
+        'quiz_id',
         'score',
-        'passed',
+        'total',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
+    }
 }

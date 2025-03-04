@@ -9,7 +9,9 @@ class CandidateController extends Controller
 {
     public function showProfile()
     {
-        return view('candidate.profile');
+        $candidateInfo = CandidateInfo::where('user_id', auth()->id())->first();
+
+        return view('candidate.profile', compact('candidateInfo'));
     }
 
     public function storeProfile(Request $request)
@@ -22,9 +24,10 @@ class CandidateController extends Controller
             'document_type' => 'required|in:cin,passport',
             'document_path' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
-
+    
         $path = $request->file('document_path')->store('documents', 'public');
-
+        \Log::info('Stored file path: ' . $path);
+    
         CandidateInfo::updateOrCreate(
             ['user_id' => auth()->id()],
             [
@@ -36,7 +39,7 @@ class CandidateController extends Controller
                 'document_path' => $path,
             ]
         );
-
-        return redirect()->route('candidate.quiz.start')->with('success', 'Profile completed successfully!');
+    
+        return redirect()->route('candidate.profile')->with('success', 'Profile completed successfully!');
     }
 }

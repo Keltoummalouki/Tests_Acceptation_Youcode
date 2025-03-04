@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\Option;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\QuizResult;
 
 class QuizController extends Controller
 {
@@ -118,20 +119,28 @@ class QuizController extends Controller
             'answers' => 'required|array',
             'answers.*' => 'exists:options,id',
         ]);
-    
+
         $quiz = Quiz::find($validated['quiz_id']);
         $score = 0;
         $total = $quiz->questions->count();
-    
+
         foreach ($quiz->questions as $question) {
             $selectedOptionId = $validated['answers'][$question->id] ?? null;
             $correctOption = $question->options->firstWhere('is_correct', true);
-            
+
             if ($selectedOptionId && $correctOption && $selectedOptionId == $correctOption->id) {
                 $score++;
             }
         }
-    
+
+        // Save the quiz result
+        QuizResult::create([
+            'user_id' => auth()->id(),
+            'quiz_id' => $quiz->id,
+            'score' => $score,
+            'total' => $total,
+        ]);
+
         return redirect()->route('candidate.profile')->with('success', "Quiz completed! Score: $score/$total");
     }
 }

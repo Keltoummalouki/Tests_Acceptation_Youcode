@@ -21,6 +21,10 @@ class CandidateInfo extends Model
         'document_path',
     ];
 
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

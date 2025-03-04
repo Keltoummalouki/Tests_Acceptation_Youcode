@@ -23,6 +23,7 @@ class CreateCandidateInfoTable extends Migration
             $table->date('date_of_birth');
             $table->string('document_type');
             $table->string('document_path');
+            $table->boolean('passed')->nullable();
             $table->timestamps();
         });
     }
