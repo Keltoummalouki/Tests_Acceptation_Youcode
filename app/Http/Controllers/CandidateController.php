@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CandidateInfo;
+use App\Models\QuizResult;
 
 class CandidateController extends Controller
 {
@@ -11,7 +12,11 @@ class CandidateController extends Controller
     {
         $candidateInfo = CandidateInfo::where('user_id', auth()->id())->first();
 
-        return view('candidate.profile', compact('candidateInfo'));
+        $quizResults = QuizResult::where('user_id', auth()->id())
+                                ->with('quiz')
+                                ->get();
+
+        return view('candidate.profile', compact('candidateInfo', 'quizResults'));
     }
 
     public function storeProfile(Request $request)

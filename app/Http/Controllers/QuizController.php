@@ -107,6 +107,16 @@ class QuizController extends Controller
             return redirect()->route('candidate.profile')->with('error', 'No quiz available at this time.');
         }
 
+        $hasTakenQuiz = QuizResult::where('user_id', auth()->id())
+                                ->where('quiz_id', $quiz->id)
+                                ->exists();
+
+        if ($hasTakenQuiz) {
+            return redirect()->route('candidate.profile')->with('error', 'You have already completed this quiz.');
+        }
+
+        $quiz->questions = $quiz->questions->shuffle();
+
         return view('candidate.quiz', [
             'quiz' => $quiz,
         ]);
@@ -124,6 +134,14 @@ class QuizController extends Controller
         $score = 0;
         $total = $quiz->questions->count();
 
+        $hasTakenQuiz = QuizResult::where('user_id', auth()->id())
+                                ->where('quiz_id', $quiz->id)
+                                ->exists();
+
+        if ($hasTakenQuiz) {
+            return redirect()->route('candidate.profile')->with('error', 'You have already submitted this quiz.');
+        }
+
         foreach ($quiz->questions as $question) {
             $selectedOptionId = $validated['answers'][$question->id] ?? null;
             $correctOption = $question->options->firstWhere('is_correct', true);
@@ -133,7 +151,6 @@ class QuizController extends Controller
             }
         }
 
-        // Save the quiz result
         QuizResult::create([
             'user_id' => auth()->id(),
             'quiz_id' => $quiz->id,

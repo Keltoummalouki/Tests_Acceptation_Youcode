@@ -1,4 +1,4 @@
-@extends('layouts.layout') <!-- Changed to use layouts.layout for consistency -->
+@extends('layouts.layout')
 
 @section('title', 'Your Profile')
 
@@ -10,7 +10,7 @@
             <div class="mb-8 text-center">
                 @if($candidateInfo)
                     <h1 class="text-3xl font-extrabold text-gray-900">Your Profile</h1>
-                    <p class="mt-2 text-lg text-gray-500">Here are your profile details</p>
+                    <p class="mt-2 text-lg text-gray-500">Here are your profile details and quiz results</p>
                 @else
                     <h1 class="text-3xl font-extrabold text-gray-900">Complete Your Profile</h1>
                     <p class="mt-2 text-lg text-gray-500">Please provide your personal information to continue</p>
@@ -34,7 +34,9 @@
                     </div>
                     <div>
                         <span class="block text-sm font-medium text-gray-700">Date of Birth</span>
-                        <p class="mt-1 text-gray-900">{{ $candidateInfo->date_of_birth->format('d/m/Y') }}</p>
+                        <p class="mt-1 text-gray-900">
+                            {{ $candidateInfo->date_of_birth ? $candidateInfo->date_of_birth->format('d/m/Y') : $candidateInfo->date_of_birth }}
+                        </p>
                     </div>
                     <div>
                         <span class="block text-sm font-medium text-gray-700">Document Type</span>
@@ -42,18 +44,42 @@
                     </div>
                     <div>
                         <span class="block text-sm font-medium text-gray-700">Document</span>
-                        <p class="mt-1 text-gray-500">Debug Path: {{ $candidateInfo->document_path }}</p>
                         <a href="{{ Storage::url($candidateInfo->document_path) }}" 
                            target="_blank" 
                            class="mt-1 text-blue-600 hover:underline">
                             View Document
                         </a>
                     </div>
+
+                    <!-- Quiz Results -->
+                    <div class="mt-8">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Your Quiz Results</h2>
+                        @if($quizResults->isEmpty())
+                            <p class="text-gray-500">You haven’t completed any quizzes yet.</p>
+                        @else
+                            <div class="space-y-4">
+                                @foreach($quizResults as $result)
+                                    <div class="border border-gray-200 rounded-lg p-4">
+                                        <p class="text-gray-900 font-medium">
+                                            Quiz: {{ $result->quiz->title }}
+                                        </p>
+                                        <p class="text-gray-700">
+                                            Score: {{ $result->score }} / {{ $result->total }}
+                                        </p>
+                                        <p class="text-gray-500 text-sm">
+                                            Completed: {{ $result->created_at->format('d/m/Y H:i') }}
+                                        </p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
                     <!-- Button to Start Quiz -->
                     <div class="pt-4">
                         <a href="{{ route('candidate.quiz.start') }}" 
                            class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                            Start Quiz
+                            Take a Quiz
                         </a>
                     </div>
                 </div>
