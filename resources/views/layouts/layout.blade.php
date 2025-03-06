@@ -24,9 +24,7 @@
                     @auth
                     @if(auth()->user()->role('Candidate'))
                         <a href="{{ route('candidate.profile') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
-                        <a href="{{ route('candidate.quiz.start') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Take Quiz</a>
-                    @elseif (auth()->user()->role('Admin'))
-                        <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Admin Dashboard</a>
+                        <a href="{{ route('quiz.start') }}" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Take Quiz</a>                    
                     @endif
                     @endauth
                 </div>

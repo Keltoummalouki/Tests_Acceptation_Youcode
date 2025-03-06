@@ -23,21 +23,26 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            switch (Auth::user()->role_id) {
-                case 1:
-                    return redirect()->route('admin.dashboard');
-                case 2:
-                    return redirect()->route('candidate.profile');
-                case 3:
-                    return redirect()->route('staff.dashboard');
-                default:
-                    return redirect()->intended('/');
-            }
+            $user = Auth::user();
+
+            return $this->redirectBasedOnRole($user);
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    protected function redirectBasedOnRole($user)
+    {
+        switch ($user->getRoleName()) {
+            case 'Admin':
+                return redirect()->route('admin.dashboard');
+            case 'Staff':
+                return redirect()->route('staff.index');
+            default:
+                return redirect()->route('candidate.profile');
+        }
     }
 
     public function destroy(Request $request)

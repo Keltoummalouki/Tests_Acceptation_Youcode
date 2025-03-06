@@ -65,6 +65,11 @@ return [
             'model' => App\Models\User::class,
         ],
 
+    'roles' => [
+        'driver' => 'eloquent',
+        'model' => Spatie\Permission\Models\Role::class,
+    ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

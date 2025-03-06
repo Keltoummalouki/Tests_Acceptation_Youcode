@@ -34,31 +34,31 @@
                     </svg>
                     Candidate
                 </a>
-                <a href="{{ route('admin.staff.index') }}" class="flex items-center px-4 bg-white-500  py-3 text-black-700 hover:bg-gray-100">
+                <a href="{{ route('staff.index') }}" class="flex items-center px-4 bg-white-500  py-3 text-white-700 hover:bg-gray-100">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     Staff
                 </a>
-                <a href="{{ route('admin.quizzes.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                <a href="{{ route('quizzes.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     Quizzes
                 </a>
-                <div class="mt-auto p-4">
-                    <form action="{{ route('logout') }}" method="POST" class="w-full">
-                        @csrf
-                        <button type="submit" 
-                                class="flex items-center w-full px-4 py-3 bg-red-600 text-white hover:bg-red-700 rounded-md transition">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Logout
-                        </button>
-                    </form>
-                </div>
             </nav>
+            <div class="mt-auto p-4">
+                <form action="{{ route('logout') }}" method="POST" class="w-full">
+                    @csrf
+                    <button type="submit" 
+                            class="flex items-center w-full px-4 py-3 bg-red-600 text-white hover:bg-red-700 rounded-md transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
+                </form>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -127,26 +127,63 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">date_of_birth</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">document_type</th>
-                                {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">document</th> --}}
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">document</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @forelse($candidates as $candidate)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $candidate->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->candidateInfo->phone }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->candidateInfo->city }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->candidateInfo->address }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->candidateInfo->date_of_birth }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->candidateInfo->document_type }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->created_at->format('m/d/Y') }}</td>
-                            </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $candidate->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->email }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $candidate->role->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            {{ $candidate->candidateInfo->phone }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            {{ $candidate->candidateInfo->address }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            {{ $candidate->candidateInfo->city }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            {{ $candidate->candidateInfo->date_of_birth }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            {{ $candidate->candidateInfo->document_type }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($candidate->candidateInfo)
+                                            <a href="{{ Storage::url($candidate->candidateInfo->document_path) }}" target="_blank">View Document</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-500">No candidates found</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="9" class="px-6 py-4 text-center text-gray-500">No candidates found</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>

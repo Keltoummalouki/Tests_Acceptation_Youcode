@@ -8,7 +8,7 @@
         <div class="bg-white rounded-lg shadow-sm p-6">
             <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Create Staff Member</h1>
 
-            <form action="{{ route('admin.staff.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('staff.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <div>

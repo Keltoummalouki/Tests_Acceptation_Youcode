@@ -13,24 +13,11 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -43,12 +30,25 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => 2,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return $this->redirectBasedOnRole($user);
+    }
+
+    protected function redirectBasedOnRole($user)
+    {
+        switch ($user->getRoleName()) {
+            case 'Admin':
+                return redirect()->route('admin.dashboard');
+            case 'Staff':
+                return redirect()->route('staff.index');
+            default:
+                return redirect()->route('candidate.profile');
+        }
     }
 }

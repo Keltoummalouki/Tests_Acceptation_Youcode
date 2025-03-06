@@ -1,113 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - YouCode</title>
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome for social media icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .youcode-logo {
-            font-family: 'Arial', sans-serif;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-        .youcode-logo .you {
-            color: #000;
-        }
-        .youcode-logo .code {
-            color: #2563eb;
-        }
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .container {
-            display: flex;
-            flex: 1;
-        }
-        .sidebar {
-            width: 100%;
-            height: auto;
-            flex-shrink: 0;
-        }
-        .main-content {
-            flex: 1;
-            overflow-x: auto;
-        }
-        @media (min-width: 768px) {
-            .sidebar {
-                width: 16rem;
-                height: 100vh;
-                position: sticky;
-                top: 0;
-            }
-        }
-        footer {
-            margin-top: auto;
-        }
-    </style>
-</head>
+@extends('layouts.layout')
 
-<body class="bg-gray-100">
+@section('title', 'Register')
 
-        <!-- Main Content -->
-        <div class="main-content p-6 flex items-center justify-center">
-            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 class="text-2xl font-bold mb-6 text-center">Inscrivez-vous</h2>
-                <form method="POST" action="{{ route('register') }}">
-                    @csrf
-
-                    <!-- Name -->
-                    <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Nom</label>
-                        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror">
-                        @error('name')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Email -->
-                    <div class="mb-4">
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror">
-                        @error('email')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Password -->
-                    <div class="mb-4">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-                        <input id="password" type="password" name="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('password') border-red-500 @enderror">
-                        @error('password')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div class="mb-6">
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirmez le mot de passe</label>
-                        <input id="password_confirmation" type="password" name="password_confirmation" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div>
-                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            S'inscrire
-                        </button>
-                    </div>
-
-                    <!-- Login Link -->
-                    <p class="mt-4 text-center text-sm text-gray-600">
-                        Vous avez déjà un compte ? <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Connexion</a>
-                    </p>
-                </form>
+@section('content')
+<div class="py-12 bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-gray-900">Register</h1>
+                <p class="mt-2 text-lg text-gray-500">Create your YouCode account</p>
             </div>
+
+            <!-- Registration Form -->
+            <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                @csrf
+
+                <!-- Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input id="name" 
+                           type="text" 
+                           name="name" 
+                           value="{{ old('name') }}" 
+                           required 
+                           autofocus 
+                           class="mt-1 block w-full rounded-md border border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none @error('name') border-red-300 @enderror"
+                           placeholder="John Doe">
+                    @error('name')
+                        <span class="mt-2 text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input id="email" 
+                           type="email" 
+                           name="email" 
+                           value="{{ old('email') }}" 
+                           required 
+                           class="mt-1 block w-full rounded-md border border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none @error('email') border-red-300 @enderror"
+                           placeholder="you@example.com">
+                    @error('email')
+                        <span class="mt-2 text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input id="password" 
+                           type="password" 
+                           name="password" 
+                           required 
+                           class="mt-1 block w-full rounded-md border border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none @error('password') border-red-300 @enderror"
+                           placeholder="••••••••">
+                    @error('password')
+                        <span class="mt-2 text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input id="password_confirmation" 
+                           type="password" 
+                           name="password_confirmation" 
+                           required 
+                           class="mt-1 block w-full rounded-md border border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+                        Register
+                    </button>
+                </div>
+
+                <!-- Login Link -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Sign in</a>
+                    </p>
+                </div>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

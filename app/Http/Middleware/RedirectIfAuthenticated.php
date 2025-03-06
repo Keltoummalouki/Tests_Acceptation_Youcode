@@ -2,22 +2,26 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, ...$guards)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                $user = Auth::user();
 
-            if ($user->hasRole('Admin')) {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->hasRole('Candidate')) {
-                return redirect()->route('candidate.profile');
+                switch ($user->getRoleName()) {
+                    case 'Admin':
+                        return redirect()->route('admin.dashboard');
+                    case 'Staff':
+                        return redirect()->route('staff.index');
+                    default:
+                        return redirect()->route('candidate.profile');
+                }
             }
         }
 

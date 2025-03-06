@@ -17,4 +17,14 @@ class StaffEvent extends Model
         'start_time',
         'end_time',
     ];
+
+    protected $casts = [
+        'time_start' => 'datetime',
+        'time_end' => 'datetime',
+    ];
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
+    }
 }

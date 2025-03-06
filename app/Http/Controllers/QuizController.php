@@ -9,6 +9,10 @@ use App\Models\Option;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\QuizResult;
+use Illuminate\Pagination\Paginator;
+use App\Http\Controllers\Illuminate\Database\Eloquent\Collection;
+use App\Models\QuizResponse;
+use Illuminate\Support\Facades\Auth;
 
 class QuizController extends Controller
 {
@@ -18,7 +22,7 @@ class QuizController extends Controller
         $totalRoles = Role::count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
         $totalQuizzes = Quiz::count();
-        $quizzes = Quiz::all();
+        $quizzes = Quiz::all()->paginate(3);
         return view('admin.quizzes.index', compact('quizzes', 'totalUsers', 'totalRoles', 'newUsersThisMonth', 'totalQuizzes'));
     }
 
@@ -104,10 +108,10 @@ class QuizController extends Controller
         $quiz = Quiz::with('questions.options')->first();
 
         if (!$quiz) {
-            return redirect()->route('candidate.profile')->with('error', 'No quiz available at this time.');
+            return redirect()->route('candidate.profile')->with('error', 'No quiz available.');
         }
 
-        $hasTakenQuiz = QuizResult::where('user_id', auth()->id())
+        $hasTakenQuiz = QuizResult::where('user_id', Auth::id())
                                 ->where('quiz_id', $quiz->id)
                                 ->exists();
 
@@ -115,11 +119,43 @@ class QuizController extends Controller
             return redirect()->route('candidate.profile')->with('error', 'You have already completed this quiz.');
         }
 
-        $quiz->questions = $quiz->questions->shuffle();
+        $questions = $quiz->questions()->with(['userResponse' => function ($query) {
+            $query->where('user_id', Auth::id());
+        }])->paginate(3);
 
-        return view('candidate.quiz', [
-            'quiz' => $quiz,
+        return view('candidate.quiz', compact('quiz', 'questions'));
+    }
+
+    public function navigate(Request $request)
+    {
+        $validated = $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id',
+            'answers' => 'nullable|array',
+            'answers.*' => 'exists:options,id',
+            'page' => 'required|integer',
+            'direction' => 'required|in:next,previous',
         ]);
+
+        $quiz = Quiz::find($validated['quiz_id']);
+        $userId = Auth::id();
+
+        if ($request->has('answers')) {
+            foreach ($request->input('answers') as $questionId => $optionId) {
+                QuizResponse::updateOrCreate(
+                    [
+                        'user_id' => $userId,
+                        'quiz_id' => $quiz->id,
+                        'question_id' => $questionId,
+                    ],
+                    ['option_id' => $optionId]
+                );
+            }
+        }
+
+        $currentPage = $validated['page'];
+        $newPage = $validated['direction'] === 'next' ? $currentPage + 1 : $currentPage - 1;
+
+        return redirect()->route('quiz.start', ['page' => $newPage]);
     }
 
     public function submit(Request $request)
@@ -131,10 +167,9 @@ class QuizController extends Controller
         ]);
 
         $quiz = Quiz::find($validated['quiz_id']);
-        $score = 0;
-        $total = $quiz->questions->count();
+        $userId = Auth::id();
 
-        $hasTakenQuiz = QuizResult::where('user_id', auth()->id())
+        $hasTakenQuiz = QuizResult::where('user_id', $userId)
                                 ->where('quiz_id', $quiz->id)
                                 ->exists();
 
@@ -142,21 +177,41 @@ class QuizController extends Controller
             return redirect()->route('candidate.profile')->with('error', 'You have already submitted this quiz.');
         }
 
+
+        foreach ($request->input('answers') as $questionId => $optionId) {
+            QuizResponse::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'quiz_id' => $quiz->id,
+                    'question_id' => $questionId,
+                ],
+                ['option_id' => $optionId]
+            );
+        }
+
+        $score = 0;
+        $total = $quiz->questions->count();
+        $responses = QuizResponse::where('user_id', $userId)
+                                ->where('quiz_id', $quiz->id)
+                                ->get();
+
         foreach ($quiz->questions as $question) {
-            $selectedOptionId = $validated['answers'][$question->id] ?? null;
+            $response = $responses->firstWhere('question_id', $question->id);
             $correctOption = $question->options->firstWhere('is_correct', true);
 
-            if ($selectedOptionId && $correctOption && $selectedOptionId == $correctOption->id) {
+            if ($response && $correctOption && $response->option_id == $correctOption->id) {
                 $score++;
             }
         }
 
         QuizResult::create([
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'quiz_id' => $quiz->id,
             'score' => $score,
             'total' => $total,
         ]);
+
+        QuizResponse::where('user_id', $userId)->where('quiz_id', $quiz->id)->delete();
 
         return redirect()->route('candidate.profile')->with('success', "Quiz completed! Score: $score/$total");
     }

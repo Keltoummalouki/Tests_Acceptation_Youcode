@@ -33,7 +33,7 @@ class CandidateController extends Controller
         $path = $request->file('document_path')->store('documents', 'public');
         \Log::info('Stored file path: ' . $path);
     
-        CandidateInfo::updateOrCreate(
+        $candidateInfo = CandidateInfo::updateOrCreate(
             ['user_id' => auth()->id()],
             [
                 'phone' => $validated['phone'],
@@ -44,7 +44,11 @@ class CandidateController extends Controller
                 'document_path' => $path,
             ]
         );
-    
+        
+        if (!$candidateInfo) {
+            return redirect()->route('candidate.profile')->with('error', 'Please complete your profile.');
+        }
+        
         return redirect()->route('candidate.profile')->with('success', 'Profile completed successfully!');
     }
 }

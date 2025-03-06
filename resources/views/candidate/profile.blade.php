@@ -45,8 +45,8 @@
                     <div>
                         <span class="block text-sm font-medium text-gray-700">Document</span>
                         <a href="{{ Storage::url($candidateInfo->document_path) }}" 
-                           target="_blank" 
-                           class="mt-1 text-blue-600 hover:underline">
+                            target="_blank" 
+                            class="mt-1 text-blue-600 hover:underline">
                             View Document
                         </a>
                     </div>
@@ -77,27 +77,27 @@
 
                     <!-- Button to Start Quiz -->
                     <div class="pt-4">
-                        <a href="{{ route('candidate.quiz.start') }}" 
-                           class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                        <a href="{{ route('quiz.start') }}" 
+                            class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Take a Quiz
                         </a>
                     </div>
                 </div>
             @else
                 <!-- Profile Form -->
-                <form action="{{ route('candidate.profile.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- Phone -->
                     <div>
                         <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
                         <input type="tel" 
-                               name="phone" 
-                               id="phone" 
-                               value="{{ old('phone') }}"
-                               class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('phone') border-red-300 @enderror"
-                               placeholder="+212 6XX XXX XXX"
-                               required>
+                                name="phone" 
+                                id="phone" 
+                                value="{{ old('phone') }}"
+                                class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('phone') border-red-300 @enderror"
+                                placeholder="+212 6XX XXX XXX"
+                                required>
                         @error('phone')
                             <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
                         @enderror
@@ -106,13 +106,13 @@
                     <!-- Address -->
                     <div>
                         <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                        <input type="text" 
-                               name="address" 
-                               id="address" 
-                               value="{{ old('address') }}"
-                               class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('address') border-red-300 @enderror"
-                               placeholder="Your full address"
-                               required>
+                            <input type="text" 
+                                name="address" 
+                                id="address" 
+                                value="{{ old('address') }}"
+                                class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('address') border-red-300 @enderror"
+                                placeholder="Your full address"
+                                required>
                         @error('address')
                             <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
                         @enderror
@@ -122,12 +122,12 @@
                     <div>
                         <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                         <input type="text" 
-                               name="city" 
-                               id="city" 
-                               value="{{ old('city') }}"
-                               class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('city') border-red-300 @enderror"
-                               placeholder="Your city"
-                               required>
+                                name="city" 
+                                id="city" 
+                                value="{{ old('city') }}"
+                                class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('city') border-red-300 @enderror"
+                                placeholder="Your city"
+                                required>
                         @error('city')
                             <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
                         @enderror
@@ -137,11 +137,11 @@
                     <div>
                         <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
                         <input type="date" 
-                               name="date_of_birth" 
-                               id="date_of_birth" 
-                               value="{{ old('date_of_birth') }}"
-                               class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('date_of_birth') border-red-300 @enderror"
-                               required>
+                                name="date_of_birth" 
+                                id="date_of_birth" 
+                                value="{{ old('date_of_birth') }}"
+                                class="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 @error('date_of_birth') border-red-300 @enderror"
+                                required>
                         @error('date_of_birth')
                             <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
                         @enderror
@@ -167,11 +167,11 @@
                     <div>
                         <label for="document_path" class="block text-sm font-medium text-gray-700">Upload Document</label>
                         <input type="file" 
-                               name="document_path" 
-                               id="document_path" 
-                               class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none @error('document_path') border-red-300 @enderror"
-                               accept=".pdf,.jpg,.png"
-                               required>
+                                name="document_path" 
+                                id="document_path" 
+                                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none @error('document_path') border-red-300 @enderror"
+                                accept=".pdf,.jpg,.png"
+                                required>
                         @error('document_path')
                             <span class="mt-1 text-sm text-red-600">{{ $message }}</span>
                         @enderror
@@ -183,8 +183,8 @@
                                 class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Save Profile
                         </button>
-                        <a href="{{ route('candidate.quiz.start') }}" 
-                           class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                        <a href="{{ route('quiz.start') }}" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Start Quiz
                         </a>
                     </div>

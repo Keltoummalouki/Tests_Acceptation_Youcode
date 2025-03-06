@@ -12,14 +12,13 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        // $this->authorize('view-dashboard');
-        $users = User::all();
-        $quizzes = Quiz::all();
-
         $totalUsers = User::count();
         $totalRoles = Role::count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
         $totalQuizzes = Quiz::count();
+
+        $users = User::with('role')->latest()->paginate(5);
+        $quizzes = Quiz::latest()->paginate(5);
 
         return view('admin.dashboard', compact('users', 'quizzes','totalUsers', 'totalRoles', 'newUsersThisMonth', 'totalQuizzes'));
     }
@@ -31,6 +30,7 @@ class AdminController extends Controller
         $totalRoles = Role::count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
         $totalQuizzes = Quiz::count();
+        $totalCandidates = $candidates->count();
 
         return view('admin.users.candidate', compact('candidates', 'totalUsers', 'totalRoles', 'newUsersThisMonth', 'totalQuizzes'));
     }
