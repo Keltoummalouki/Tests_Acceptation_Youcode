@@ -19,8 +19,10 @@ class RedirectIfAuthenticated
                         return redirect()->route('admin.dashboard');
                     case 'Staff':
                         return redirect()->route('staff.index');
+                    case 'Candidate':
+                        return redirect()->route('candidate.profile');        
                     default:
-                        return redirect()->route('candidate.profile');
+                        return redirect()->route('home');
                 }
             }
         }

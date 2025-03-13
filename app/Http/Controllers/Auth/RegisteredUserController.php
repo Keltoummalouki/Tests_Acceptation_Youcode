@@ -47,8 +47,10 @@ class RegisteredUserController extends Controller
                 return redirect()->route('admin.dashboard');
             case 'Staff':
                 return redirect()->route('staff.index');
-            default:
+            case 'Candidate':
                 return redirect()->route('candidate.profile');
+            default:
+                return redirect()->route('home');
         }
     }
 }

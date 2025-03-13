@@ -19,7 +19,7 @@ class QuizSeeder extends Seeder
         $quiz = Quiz::create([
             'title' => 'Sample Quiz',
             'description' => 'This is a sample quiz for development purposes.',
-            'time_limit' => 30, // in minutes
+            'time_limit' => 30,
         ]);
 
         $questions = [

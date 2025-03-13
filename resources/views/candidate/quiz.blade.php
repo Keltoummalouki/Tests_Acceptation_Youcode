@@ -64,7 +64,7 @@
                         </button>
                     @else
                         <button type="submit" name="direction" value="previous"
-                                formaction="{{ route('quiz.navigate') }}"
+                                formaction="{{ route('candidate.quiz.navigate') }}"
                                 class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Previous
                         </button>
@@ -72,12 +72,12 @@
 
                     @if($questions->hasMorePages())
                         <button type="submit" name="direction" value="next"
-                                formaction="{{ route('quiz.navigate') }}"
+                                formaction="{{ route('candidate.quiz.navigate') }}"
                                 class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Next
                         </button>
                     @else
-                        <button type="submit" formaction="{{ route('quiz.submit') }}"
+                        <button type="submit" formaction="{{ route('candidate.quiz.submit') }}"
                                 class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Submit Quiz
                         </button>
@@ -108,7 +108,7 @@
                 if (--timer < 0) {
                     clearInterval(interval);
                     alert("Time's up!");
-                    quizForm.action = '{{ route('quiz.submit') }}';
+                    quizForm.action = '{{ route('candidate.quiz.submit') }}';
                     quizForm.submit();
                 }
             }, 1000);

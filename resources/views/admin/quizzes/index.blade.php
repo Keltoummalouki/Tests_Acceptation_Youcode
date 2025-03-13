@@ -40,7 +40,7 @@
                     </svg>
                     Staff
                 </a>
-                <a href="{{ route('quizzes.index') }}" class="flex items-center px-4 bg-purple-500 py-3 text-white-700 hover:bg-gray-100">
+                <a href="{{ route('admin.quizzes.index') }}" class="flex items-center px-4 bg-purple-500 py-3 text-white-700 hover:bg-gray-100">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
@@ -120,7 +120,7 @@
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-2xl font-bold">Quizzes</h1>
-                        <a href="{{ route('quizzes.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                        <a href="{{ route('admin.quizzes.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
                             Create Quiz
                         </a>
                     </div>
@@ -142,9 +142,9 @@
                                 <td class="py-3 px-4">{{ $quiz->description }}</td>
                                 <td class="py-3 px-4">{{ $quiz->time_limit }} minutes</td>
                                 <td class="py-3 px-4 space-x-2">
-                                    <a href="{{ route('quizzes.show', $quiz->id) }}" class="text-blue-500 hover:text-blue-700">View</a>
-                                    <a href="{{ route('quizzes.edit', $quiz->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
-                                    <form action="{{ route('quizzes.destroy', $quiz->id) }}" method="POST" class="inline-block">
+                                    <a href="{{ route('admin.quizzes.show', $quiz->id) }}" class="text-blue-500 hover:text-blue-700">View</a>
+                                    <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
+                                    <form action="{{ route('admin.quizzes.destroy', $quiz->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>

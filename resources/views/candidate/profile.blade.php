@@ -77,7 +77,7 @@
 
                     <!-- Button to Start Quiz -->
                     <div class="pt-4">
-                        <a href="{{ route('quiz.start') }}" 
+                        <a href="{{ route('candidate.quiz.start') }}" 
                             class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Take a Quiz
                         </a>
@@ -85,7 +85,7 @@
                 </div>
             @else
                 <!-- Profile Form -->
-                <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form action="{{ route('candidate.profile.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- Phone -->
@@ -183,7 +183,7 @@
                                 class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Save Profile
                         </button>
-                        <a href="{{ route('quiz.start') }}" 
+                        <a href="{{ route('candidate.quiz.start') }}" 
                             class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                             Start Quiz
                         </a>

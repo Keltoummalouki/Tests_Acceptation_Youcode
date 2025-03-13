@@ -22,7 +22,7 @@ class QuizController extends Controller
         $totalRoles = Role::count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
         $totalQuizzes = Quiz::count();
-        $quizzes = Quiz::all()->paginate(3);
+        $quizzes = Quiz::paginate(3);
         return view('admin.quizzes.index', compact('quizzes', 'totalUsers', 'totalRoles', 'newUsersThisMonth', 'totalQuizzes'));
     }
 
@@ -54,9 +54,8 @@ class QuizController extends Controller
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz created successfully.');
     }
 
-    public function show(Quiz $quiz , $id)
+    public function show(Quiz $quiz)
     {
-        $quiz = Quiz::find($id);
         return view('admin.quizzes.show', compact('quiz'));
     }
 
@@ -155,7 +154,7 @@ class QuizController extends Controller
         $currentPage = $validated['page'];
         $newPage = $validated['direction'] === 'next' ? $currentPage + 1 : $currentPage - 1;
 
-        return redirect()->route('quiz.start', ['page' => $newPage]);
+        return redirect()->route('candidate.quiz.start', ['page' => $newPage]);
     }
 
     public function submit(Request $request)

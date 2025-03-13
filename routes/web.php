@@ -15,26 +15,30 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login')->middleware('guest');
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-Route::prefix('staff')->name('staff.')->middleware(['auth', 'role:3'])->group(function () {
-    Route::get('/', [StaffController::class, 'staffDashboard'])->name('index');
-    Route::patch('/event/{event}', [StaffController::class, 'updateEvent'])->name('event.update');
-    Route::get('/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.profile.view');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/candidate', [AdminController::class, 'candidate'])->name('candidate');
+    Route::resource('quizzes', QuizController::class);
+    Route::resource('staff', AdminController::class);
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('role:Admin');
-    Route::get('/candidate', [AdminController::class, 'candidate'])->name('admin.candidate')->middleware('role:Admin');
-    Route::resource('quizzes', QuizController::class)->middleware('role:Admin');
-    Route::resource('staff', StaffController::class)->middleware('role:Admin');
-    Route::get('/candidate/profile', [CandidateController::class, 'showProfile'])->name('candidate.profile')->middleware('role:Candidate');
-    Route::post('/profile', [CandidateController::class, 'storeProfile'])->name('profile.store')->middleware('role:Candidate');
-    Route::get('/quiz', [QuizController::class, 'start'])->name('quiz.start')->middleware('role:Candidate');
-    Route::post('/quiz/navigate', [QuizController::class, 'navigate'])->name('quiz.navigate')->middleware('role:Candidate');
-    Route::post('/quiz/submit', [QuizController::class, 'submit'])->name('quiz.submit')->middleware('role:Candidate');
-    Route::get('/staff', [StaffController::class, 'staffDashboard'])->name('staff.index')->middleware('role:Staff');
-    Route::patch('/event/{event}', [StaffController::class, 'updateEvent'])->name('event.update')->middleware('role:Staff');
-    Route::get('/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.profile.view')->middleware('role:Staff');
+Route::prefix('candidate')->name('candidate.')->middleware(['auth','role:Candidate'])->group(function () {
+    Route::get('/candidate/profile', [CandidateController::class, 'showProfile'])->name('profile');
+    Route::post('/profile', [CandidateController::class, 'storeProfile'])->name('profile.store');
+    Route::get('/quiz', [QuizController::class, 'start'])->name('quiz.start');
+    Route::post('/quiz/navigate', [QuizController::class, 'navigate'])->name('quiz.navigate');
+    Route::post('/quiz/submit', [QuizController::class, 'submit'])->name('quiz.submit');
+});
+
+Route::prefix('staff')->name('staff.')->middleware(['auth', 'role:3'])->group(function () {
+    Route::get('/dashboard', [StaffController::class, 'staffDashboard'])->name('index');
+    Route::patch('/event/{event}', [StaffController::class, 'updateEvent'])->name('event.update');
+    Route::get('/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.profile.view');
+    Route::patch('/event/{event}', [StaffController::class, 'updateEvent'])->name('event.update');
+    Route::get('/candidate/{id}', [CandidateController::class, 'show'])->name('candidate.profile.view');
+    
 });
